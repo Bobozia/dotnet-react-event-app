@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Services;
 using Models;
 using DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Controllers;
 
@@ -9,12 +11,12 @@ namespace Controllers;
 [Route("api/users")]
 public class UsersController : ControllerBase
 {
-    //private readonly UserService _userService;
+    private readonly UserService _userService;
     private readonly AuthenticationService _authenticationService;
 
     public UsersController(UserService userService, AuthenticationService authenticationService)
     {
-        //_userService = userService;
+        _userService = userService;
         _authenticationService = authenticationService;
     }
 
@@ -40,26 +42,51 @@ public class UsersController : ControllerBase
         }
     }
 
-    /*TODO:
-    * login
-    * ping for logged in user
-    * logout
-    * cookies
-    */
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+    {
+        try
+        {
+            (bool success, string token) = await _authenticationService.Login(loginRequest);
 
+            if (success)
+            {
+                Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddDays(7)
+                });
+                string id = await _userService.GetUserId(loginRequest.UserName);
+                return Ok(new LoginResponse { Success = true, Message = "User logged in successfully", Id = id });
+            }
+            return BadRequest(new LoginResponse { Success = false, Message = "Bad credentials" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new LoginResponse { Success = false, Message = ex.Message });
+        }
+    }
 
+    [HttpPost("logout")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public IActionResult Logout()
+    {
+        try
+        {
+            Response.Cookies.Delete("X-Access-Token");
+            return Ok(new { Success = true, Message = "Logged out successfully" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Success = false, ex.Message });
+        }
+    }
 
-    //[HttpPost]
-    // public async Task<IActionResult> Create([FromServices] DatabaseContext context, [FromBody] User user)
-    // {
-    //     if (!ModelState.IsValid)
-    //     {
-    //         return BadRequest(ModelState);
-    //     }
-
-    //     await context.Users.AddAsync(user);
-    //     await context.SaveChangesAsync();
-
-    //     return CreatedAtRoute("GetUser", new { id = user.Id }, user);
-    // }
+    [HttpGet("ping")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public IActionResult Ping()
+    {
+        return Ok(new { Success = true, Message = "Logged in, `click`, noice" });
+    }
 }
