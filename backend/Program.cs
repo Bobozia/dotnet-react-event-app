@@ -28,6 +28,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<DatabaseContext>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<EventService>();
 
 JWTSettings jwtSettings = new();
 builder.Configuration.Bind("JWTSettings", jwtSettings);

@@ -21,5 +21,21 @@ namespace Services
                 return user.Id;
             return null!;
         }
+
+        public async Task<User?> GetUser(string userName)
+        {
+            User? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            if (user != null)
+                return user;
+            return null!;
+        }
+
+        public async Task<User?> GetUserWithEvents(string userName)
+        {
+            User? user = await _context.Users.Include(u => u.Events).FirstOrDefaultAsync(u => u.UserName == userName);
+            if (user != null)
+                return user;
+            return null!;
+        }
     }
 }

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
-using Models;
 using DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 
 namespace Controllers;
 
@@ -87,6 +87,8 @@ public class UsersController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public IActionResult Ping()
     {
-        return Ok(new { Success = true, Message = "Logged in, `click`, noice" });
+        var userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var user = _userService.GetUserWithEvents(userName!);
+        return Ok(new { Success = true, Message = "Logged in, `click`, noice", UserData = user });
     }
 }
