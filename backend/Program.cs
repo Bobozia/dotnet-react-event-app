@@ -29,6 +29,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<EventService>();
+builder.Services.AddScoped<CommentService>();
 
 JWTSettings jwtSettings = new();
 builder.Configuration.Bind("JWTSettings", jwtSettings);

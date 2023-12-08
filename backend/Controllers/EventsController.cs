@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Services;
 using Models;
 using DTOs;
-using Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -57,7 +56,61 @@ public class EventsController : ControllerBase
         }
     }
 
-    // [HttpGet]
+    [HttpGet]
+    public async Task<IActionResult> GetEvents()
+    {
+        try
+        {
+            List<Event>? events = await _eventService.GetEvents();
+            if (events != null)
+                return Ok(new EventsResponse { Success = true, Message = "Events found", Events = events });
+            return BadRequest(new EventsResponse { Success = false, Message = "Events not found" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new EventsResponse { Success = false, Message = ex.Message });
+        }
+    }
 
-    // [HttpDelete("{id}")]
+    [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> DeleteEvent(string id)
+    {
+        try
+        {
+            User? user = await _userService.GetUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            Event? foundEvent = await _eventService.GetEvent(id);
+            if (foundEvent != null && foundEvent.UserId == user!.Id)
+            {
+                await _eventService.DeleteEvent(foundEvent);
+                return Ok(new EventResponse { Success = true, Message = "Event deleted successfully", Event = foundEvent });
+            }
+            return BadRequest(new EventResponse { Success = false, Message = "Event not found or you don't have permissions to delete this event" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new EventResponse { Success = false, Message = ex.Message });
+        }
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> UpdateEvent(string id, [FromBody] UpdateEventRequest request)
+    {
+        try
+        {
+            User? user = await _userService.GetUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            Event? foundEvent = await _eventService.GetEvent(id);
+            if (foundEvent != null && foundEvent.UserId == user!.Id)
+            {
+                foundEvent = await _eventService.UpdateEvent(foundEvent, request);
+                return Ok(new EventResponse { Success = true, Message = "Event updated successfully", Event = foundEvent });
+            }
+            return BadRequest(new EventResponse { Success = false, Message = "Event not found or you don't have permissions to delete this event" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new EventResponse { Success = false, Message = ex.Message });
+        }
+    }
 }
