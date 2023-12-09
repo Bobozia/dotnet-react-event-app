@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { UserProvider } from "./contexts/UserContext";
 import NavBar from "./components/NavBar";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 import Register from "./pages/Register";
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
         <UserProvider>
           <NavBar />
           <Routes>
-            <Route path="/" element={<h1>Home Page</h1>} />
+            <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="events" element={<h1>Events page</h1>} />
