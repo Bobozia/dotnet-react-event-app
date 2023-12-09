@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { UserProvider } from "./contexts/UserContext";
 import NavBar from "./components/NavBar";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -10,8 +12,8 @@ function App() {
           <NavBar />
           <Routes>
             <Route path="/" element={<h1>Home Page</h1>} />
-            <Route path="login" element={<h1>Login page</h1>} />
-            <Route path="register" element={<h1>Register page</h1>} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
             <Route path="events" element={<h1>Events page</h1>} />
             <Route path="events/:name" element={<h1>Event page</h1>} />
             <Route path="*" element={<h1>Not Found</h1>} />
