@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { UserProvider } from "./contexts/UserContext";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
     <div className="bg-slate-700 h-screen w-screen">
       <Router>
         <UserProvider>
+          <NavBar />
           <Routes>
             <Route path="/" element={<h1>Home Page</h1>} />
             <Route path="login" element={<h1>Login page</h1>} />
