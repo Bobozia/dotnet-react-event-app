@@ -16,6 +16,7 @@ namespace Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().HasKey(u => u.Id);
+            modelBuilder.Entity<Event>().HasIndex(e => e.Name).IsUnique();
         }
     }
 }

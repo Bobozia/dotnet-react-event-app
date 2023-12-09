@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Models;
 
 namespace DTOs
@@ -32,11 +33,11 @@ namespace DTOs
 
     public class UpdateEventRequest
     {
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Location { get; set; } = string.Empty;
-        public DateOnly Date { get; set; } = new();
-        public TimeOnly Time { get; set; } = new();
-        public byte[] Image { get; set; } = Array.Empty<byte>();
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public string? Location { get; set; }
+        public DateOnly? Date { get; set; }
+        public TimeOnly? Time { get; set; }
+        public byte[]? Image { get; set; }
     }
 }
