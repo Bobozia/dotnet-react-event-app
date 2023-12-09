@@ -91,4 +91,13 @@ public class UsersController : ControllerBase
         var user = _userService.GetUserWithEvents(userName!);
         return Ok(new { Success = true, Message = "Logged in, `click`, noice", UserData = user });
     }
+
+    [HttpGet("user")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public IActionResult GetUser()
+    {
+        var userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var user = _userService.GetUser(userName!);
+        return Ok(new { Success = true, Message = "Logged in, `click`, noice", UserId = user.Id });
+    }
 }
