@@ -20,7 +20,8 @@ namespace Services
         }
         public async Task<Event?> CreateEvent(string name, string description, string location, DateOnly date, TimeOnly time, byte[] image, string userId)
         {
-            image ??= GetDefaultEventImage();
+            if (await _context.Events.AnyAsync(e => e.Name == name)) throw new Exception("Event with that name already exists");
+            if (image.Equals(Array.Empty<byte>())) image = GetDefaultEventImage();
             Event newEvent = new()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -37,9 +38,17 @@ namespace Services
             return newEvent;
         }
 
-        public async Task<Event?> GetEvent(string id)
+        public async Task<Event?> GetEventById(string id)
         {
             Event? foundEvent = await _context.Events.Include(e => e.Comments).FirstOrDefaultAsync(e => e.Id == id);
+            if (foundEvent != null)
+                return foundEvent;
+            return null!;
+        }
+
+        public async Task<Event?> GetEventByName(string name)
+        {
+            Event? foundEvent = await _context.Events.Include(e => e.Comments).FirstOrDefaultAsync(e => e.Name == name);
             if (foundEvent != null)
                 return foundEvent;
             return null!;

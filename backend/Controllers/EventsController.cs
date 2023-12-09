@@ -40,12 +40,12 @@ public class EventsController : ControllerBase
         }
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetEvent(string id)
+    [HttpGet("{name}")]
+    public async Task<IActionResult> GetEvent(string name)
     {
         try
         {
-            Event? foundEvent = await _eventService.GetEvent(id);
+            Event? foundEvent = await _eventService.GetEventByName(name);
             if (foundEvent != null)
                 return Ok(new EventResponse { Success = true, Message = "Event found", Event = foundEvent });
             return BadRequest(new EventResponse { Success = false, Message = "Event not found" });
@@ -79,7 +79,7 @@ public class EventsController : ControllerBase
         try
         {
             User? user = await _userService.GetUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-            Event? foundEvent = await _eventService.GetEvent(id);
+            Event? foundEvent = await _eventService.GetEventById(id);
             if (foundEvent != null && foundEvent.UserId == user!.Id)
             {
                 await _eventService.DeleteEvent(foundEvent);
@@ -100,7 +100,7 @@ public class EventsController : ControllerBase
         try
         {
             User? user = await _userService.GetUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
-            Event? foundEvent = await _eventService.GetEvent(id);
+            Event? foundEvent = await _eventService.GetEventById(id);
             if (foundEvent != null && foundEvent.UserId == user!.Id)
             {
                 foundEvent = await _eventService.UpdateEvent(foundEvent, request);
