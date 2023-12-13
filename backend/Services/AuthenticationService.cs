@@ -18,12 +18,18 @@ namespace Services
             _jwtCreator = jwtCreator;
         }
 
+        private static byte[] GetDefaultProfilePicture()
+        {
+            return File.ReadAllBytes("default-profile-picture.png");
+        }
+
         public async Task<(bool, string)> Register(RegisterRequest registerRequest)
         {
             var user = new User
             {
                 UserName = registerRequest.UserName,
-                Email = registerRequest.Email
+                Email = registerRequest.Email,
+                ProfilePicture = GetDefaultProfilePicture()
             };
 
             var result = await _userManager.CreateAsync(user, registerRequest.Password);
@@ -61,6 +67,5 @@ namespace Services
 
             return (false, "");
         }
-
     }
 }
