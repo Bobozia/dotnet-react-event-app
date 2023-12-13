@@ -50,7 +50,10 @@ namespace Services
         {
             Event? foundEvent = await _context.Events.Include(e => e.Comments).FirstOrDefaultAsync(e => e.Name == name);
             if (foundEvent != null)
+            {
+                foundEvent.Comments = foundEvent.Comments.OrderByDescending(c => c.CreatedAt).ToList();
                 return foundEvent;
+            }
             return null!;
         }
 

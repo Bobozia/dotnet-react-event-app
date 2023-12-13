@@ -41,5 +41,18 @@ namespace Services
                 return user;
             return null!;
         }
+
+        public async Task<UserData?> GetUserById(string id)
+        {
+            User? user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user != null)
+                return new UserData
+                {
+                    Id = user.Id,
+                    UserName = user.UserName!,
+                    ProfilePicture = user.ProfilePicture
+                };
+            return null!;
+        }
     }
 }

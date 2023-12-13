@@ -20,6 +20,10 @@ export function getUserId() {
   return axios.get(`${API_URL}/user`);
 }
 
+export function getUserById(id) {
+  return axios.get(`${API_URL}/${id}`);
+}
+
 // export function logout() {
 //    Implement logout API call...
 // }

@@ -101,4 +101,13 @@ public class UsersController : ControllerBase
         var userId = _userService.GetUserId(userName!);
         return Ok(new { Success = true, Message = "Logged in, `click`, noice", UserId = userId.Result });
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserData(string id)
+    {
+        UserData? user = await _userService.GetUserById(id);
+        if (user != null)
+            return Ok(new UserDataResponse { Success = true, Message = "User data", User = user });
+        return BadRequest(new { Success = false, Message = "User not found" });
+    }
 }
