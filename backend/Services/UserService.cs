@@ -1,4 +1,5 @@
 using Data;
+using DTOs;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -18,7 +19,10 @@ namespace Services
         {
             User? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
             if (user != null)
-                return user.Id;
+            {
+                string id = user.Id;
+                return id;
+            }
             return null!;
         }
 
@@ -27,7 +31,7 @@ namespace Services
             User? user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
             if (user != null)
                 return user;
-            return null!;
+            throw new Exception("User not found");
         }
 
         public async Task<User?> GetUserWithEvents(string userName)

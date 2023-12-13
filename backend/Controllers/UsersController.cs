@@ -4,6 +4,7 @@ using DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
+using Models;
 
 namespace Controllers;
 
@@ -87,7 +88,7 @@ public class UsersController : ControllerBase
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public IActionResult Ping()
     {
-        var userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        string? userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var user = _userService.GetUserWithEvents(userName!);
         return Ok(new { Success = true, Message = "Logged in, `click`, noice", UserData = user });
     }
@@ -97,7 +98,7 @@ public class UsersController : ControllerBase
     public IActionResult GetUser()
     {
         var userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var user = _userService.GetUser(userName!);
-        return Ok(new { Success = true, Message = "Logged in, `click`, noice", UserId = user.Id });
+        var userId = _userService.GetUserId(userName!);
+        return Ok(new { Success = true, Message = "Logged in, `click`, noice", UserId = userId.Result });
     }
 }

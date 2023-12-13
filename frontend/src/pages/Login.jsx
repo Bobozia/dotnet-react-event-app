@@ -20,7 +20,7 @@ function Login() {
     try {
       const result = await login(userName, password);
       setUser({ userName: userName, id: result.data.id });
-      localStorage.setItem("userName", JSON.stringify(userName));
+      localStorage.setItem("userName", userName);
       navigate("/");
     } catch (error) {
       setError(error.response.data.message);
@@ -28,7 +28,6 @@ function Login() {
   };
 
   useEffect(() => {
-    console.log(user);
     if (user.id !== null) {
       navigate("/");
     }
@@ -55,12 +54,11 @@ function Login() {
           className="mb-2 rounded-md focus:outline-none hover:bg-slate-100 w-[100%]"
         />
         {error && <p className="text-red-500">{error}</p>}
-        <button
+        <input
           type="submit"
           className="mb-2 px-4 py-1 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200"
-        >
-          Log In
-        </button>
+          value="Log In"
+        />
       </form>
       <Link to="/register" className="text-slate-200 hover:text-slate-300">
         Don't have account yet? Register by clicking here!

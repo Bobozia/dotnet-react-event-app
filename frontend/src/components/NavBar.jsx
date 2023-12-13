@@ -5,18 +5,19 @@ import { getUserId } from "../api/user";
 
 function NavBar() {
   const { user, setUser } = useContext(UserContext);
-  //const [userName, setUserName] = useState("");
 
   useEffect(() => {
     authorize();
-  }, []);
+  }, [user?.id]);
 
   const authorize = async () => {
     if (localStorage.getItem("userName") === null) return false;
     const response = await getUserId();
-    if (response.success) {
-      setUser({ userName: localStorage.getItem("userName"), id: response.id });
-      console.log(user);
+    if (response.data.success) {
+      setUser({
+        userName: localStorage.getItem("userName"),
+        id: response.data.userId,
+      });
       return true;
     }
     window.location.reload();
@@ -24,12 +25,23 @@ function NavBar() {
   };
 
   return (
-    <div className="fixed inset-x-0 bg-gray-800 text-slate-300">
-      <div className="flex justify-center items-center gap-6 text-2xl">
+    <div className="flex flex-row fixed inset-x-0 bg-gray-800 text-slate-300">
+      <div className="flex justify-center items-center gap-6 text-2xl w-[90%]">
         <NavBarButton destination="/" title="Home" />
-        <NavBarButton destination="/login" title="Login" />
-        <NavBarButton destination="/register" title="Register" />
         <NavBarButton destination="/events" title="Events" />
+      </div>
+      <div className="w-[10%] text-center">
+        {!user?.userName && (
+          <div className="flex justify-center gap-6 h-full text-2xl w-full">
+            <NavBarButton destination="/login" title="Login" />
+            <NavBarButton destination="/register" title="Register" />
+          </div>
+        )}
+        {user?.userName && (
+          <div className="flex justify-center items-center h-full font-bold text-xl">
+            <span className="">{user.userName}</span>
+          </div>
+        )}
       </div>
     </div>
   );
