@@ -1,17 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { deleteEvent } from "../api/event";
 
-function EventCard({ event, isOwner }) {
+function EventCard({ event, isOwner, events, setEvents }) {
+  const navigate = useNavigate();
+
   const handleDeleteEvent = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this event?")) {
       const res = await deleteEvent(event.id);
-      if (res.status === 200) {
-        window.location.reload();
-      }
+      if (res.status === 200)
+        setEvents(events.filter((e) => e.id !== event.id));
     }
   };
 
@@ -21,7 +22,7 @@ function EventCard({ event, isOwner }) {
         className=" w-[35%] aspect-square bg-cover bg-center hover:cursor-pointer hover:opacity-90"
         style={{ backgroundImage: `url(data:image/png;base64,${event.image}` }}
         onClick={() => {
-          window.location.href = `/events/${event.name}`;
+          navigate(`/events/${event.name}`);
         }}
       >
         {isOwner && (

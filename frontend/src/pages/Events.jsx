@@ -41,7 +41,7 @@ function Events() {
       )}
       {loading && <p>Loading...</p>}
       {!loading && events.length == 0 && <p>There are no events :P</p>}
-      <EventsGrid events={events} />
+      <EventsGrid events={events} setEvents={setEvents} />
     </div>
   );
 }

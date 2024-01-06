@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createEvent } from "../api/event";
+import { useNavigate } from "react-router-dom";
 
 function CreateEvent() {
   const [name, setName] = useState("");
@@ -8,6 +9,7 @@ function CreateEvent() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [image, setImage] = useState("");
+  const navigate = useNavigate();
 
   const tryCreateEvent = async (e) => {
     e.preventDefault();
@@ -22,15 +24,7 @@ function CreateEvent() {
     if (image) event.image = image;
     const res = await createEvent(event);
 
-    if (res.status === 200) {
-      alert("Event created successfully");
-      setName("");
-      setDescription("");
-      setLocation("");
-      setDate("");
-      setTime("");
-      setImage("");
-    }
+    if (res.status === 200) navigate("/events");
   };
 
   const handleFileChange = (e) => {

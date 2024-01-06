@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import EventCard from "./EventCard";
 
-function EventsGrid({ events }) {
+function EventsGrid({ events, setEvents }) {
   //add select to choose : upcoming, past, all
   //add search bar
   //add pagination
@@ -14,6 +14,8 @@ function EventsGrid({ events }) {
         <EventCard
           key={event.id}
           event={event}
+          events={events}
+          setEvents={setEvents}
           isOwner={event.userId == user.id ? true : false}
         />
       ))}
