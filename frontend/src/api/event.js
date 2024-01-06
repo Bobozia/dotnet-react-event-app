@@ -10,3 +10,8 @@ export function getAllEvents() {
 export function getEventByName(name) {
   return axios.get(`${API_URL}/${name}`);
 }
+
+export function createEvent(event) {
+  console.log(event);
+  return axios.post(`${API_URL}`, event);
+}

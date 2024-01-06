@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Events from "./pages/Events";
 import Event from "./pages/Event";
+import CreateEvent from "./pages/createEvent";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="events" element={<Events />} />
           <Route path="events/:name" element={<Event />} />
+          <Route path="create-event" element={<CreateEvent />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Router>

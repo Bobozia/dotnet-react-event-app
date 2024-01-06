@@ -18,10 +18,15 @@ namespace Services
         {
             return File.ReadAllBytes("default-event-image.jpg");
         }
-        public async Task<Event?> CreateEvent(string name, string description, string location, DateOnly date, TimeOnly time, byte[] image, string userId)
+        public async Task<Event?> CreateEvent(string name, string description, string location, DateOnly date, TimeOnly time, string image, string userId)
         {
+            byte[] img = Array.Empty<byte>();
             if (await _context.Events.AnyAsync(e => e.Name == name)) throw new Exception("Event with that name already exists");
-            if (image.Equals(Array.Empty<byte>())) image = GetDefaultEventImage();
+            if (image.Equals(""))
+                img = GetDefaultEventImage();
+            else
+                img = Convert.FromBase64String(image.Split(",")[1]);
+
             Event newEvent = new()
             {
                 Id = Guid.NewGuid().ToString(),
@@ -30,7 +35,7 @@ namespace Services
                 Location = location,
                 Date = date,
                 Time = time,
-                Image = image,
+                Image = img,
                 UserId = userId
             };
             await _context.Events.AddAsync(newEvent);
