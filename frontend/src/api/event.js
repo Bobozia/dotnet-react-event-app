@@ -12,6 +12,13 @@ export function getEventByName(name) {
 }
 
 export function createEvent(event) {
-  console.log(event);
   return axios.post(`${API_URL}`, event);
+}
+
+export function updateEvent(id, event) {
+  return axios.put(`${API_URL}/${id}`, event);
+}
+
+export function deleteEvent(id) {
+  return axios.delete(`${API_URL}/${id}`);
 }

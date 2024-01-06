@@ -1,6 +1,20 @@
 import { Link } from "react-router-dom";
+import { FiEdit } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
+import { deleteEvent } from "../api/event";
 
-function EventCard({ event }) {
+function EventCard({ event, isOwner }) {
+  const handleDeleteEvent = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to delete this event?")) {
+      const res = await deleteEvent(event.id);
+      if (res.status === 200) {
+        window.location.reload();
+      }
+    }
+  };
+
   return (
     <div className="flex flex-row mx-3 border-slate-600 border-2 rounded-md mt-2 hover:border-slate-400">
       <div
@@ -9,7 +23,29 @@ function EventCard({ event }) {
         onClick={() => {
           window.location.href = `/events/${event.name}`;
         }}
-      ></div>
+      >
+        {isOwner && (
+          <>
+            <div className="flex justify-end h-1/6">
+              <Link
+                onClick={(e) => e.stopPropagation()}
+                to={`/events/${event.name}/update`}
+                className="bg-gray-500 h-min p-1 border-2 border-gray-600 hover:bg-gray-600 hover:border-gray-800"
+              >
+                <FiEdit color="white" size="20px" />
+              </Link>
+            </div>
+            <div className="flex h-5/6 justify-end items-end">
+              <span
+                onClick={handleDeleteEvent}
+                className="bg-gray-500 h-min p-1 border-2 border-gray-600 hover:bg-gray-600 hover:border-gray-800"
+              >
+                <MdDelete color="red" size="20px" />
+              </span>
+            </div>
+          </>
+        )}
+      </div>
 
       <div className="pl-2">
         <Link

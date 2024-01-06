@@ -22,7 +22,7 @@ namespace Services
         {
             byte[] img = Array.Empty<byte>();
             if (await _context.Events.AnyAsync(e => e.Name == name)) throw new Exception("Event with that name already exists");
-            if (image.Equals(""))
+            if (image == null)
                 img = GetDefaultEventImage();
             else
                 img = Convert.FromBase64String(image.Split(",")[1]);
@@ -80,9 +80,12 @@ namespace Services
             int changes = 0;
             foreach (PropertyInfo property in typeof(UpdateEventRequest).GetProperties())
             {
-                if (property.GetValue(request) != null)
+                if (property.GetValue(request) != null && property.GetValue(request)!.ToString() != "")
                 {
-                    eventToUpdate.GetType().GetProperty(property.Name)?.SetValue(eventToUpdate, property.GetValue(request));
+                    if (property.Name == "Image")
+                        eventToUpdate.Image = Convert.FromBase64String(property.GetValue(request)!.ToString()!.Split(",")[1]);
+                    else
+                        eventToUpdate.GetType().GetProperty(property.Name)?.SetValue(eventToUpdate, property.GetValue(request));
                     changes++;
                 }
             }
