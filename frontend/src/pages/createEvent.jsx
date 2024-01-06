@@ -112,7 +112,7 @@ function CreateEvent() {
           <input
             type="submit"
             className="mb-2 px-4 py-1 mt-2 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200 cursor-pointer"
-            value="Create Event"
+            value="Create"
           />
         </fieldset>
       </form>
