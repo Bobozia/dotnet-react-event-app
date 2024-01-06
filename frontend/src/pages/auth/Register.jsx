@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { login, register } from "../api/user";
-import { UserContext } from "../contexts/UserContext";
+import { login, register } from "../../api/user";
+import { UserContext } from "../../contexts/UserContext";
 import { Link, useNavigate } from "react-router-dom";
 
 function Register() {

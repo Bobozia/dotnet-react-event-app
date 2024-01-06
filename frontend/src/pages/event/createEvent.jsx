@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createEvent } from "../api/event";
+import { createEvent } from "../../api/event";
 import { useNavigate } from "react-router-dom";
 
 function CreateEvent() {

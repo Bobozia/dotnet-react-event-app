@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { getAllEvents } from "../api/event";
-import EventsGrid from "../components/EventsGrid";
-import { UserContext } from "../contexts/UserContext";
+import { getAllEvents } from "../../api/event";
+import EventsGrid from "../../components/EventsGrid";
+import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
 function Events() {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { login } from "../api/user";
+import { login } from "../../api/user";
 import { Link } from "react-router-dom";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
 function Login() {

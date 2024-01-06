@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import Login from "./pages/Login";
+import Login from "./pages/auth/Login";
 import Home from "./pages/Home";
-import Register from "./pages/Register";
-import Events from "./pages/Events";
-import Event from "./pages/Event";
-import CreateEvent from "./pages/createEvent";
-import UpdateEvent from "./pages/updateEvent";
+import Register from "./pages/auth/Register";
+import Events from "./pages/event/Events";
+import Event from "./pages/event/Event";
+import CreateEvent from "./pages/event/createEvent";
+import UpdateEvent from "./pages/event/updateEvent";
 
 function App() {
   return (

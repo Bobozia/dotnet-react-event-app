@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getEventByName, updateEvent } from "../api/event";
+import { getEventByName, updateEvent } from "../../api/event";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
 

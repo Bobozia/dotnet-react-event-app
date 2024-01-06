@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { deleteEvent, getEventByName } from "../api/event";
-import Comment from "../components/Comment";
-import { getUserById } from "../api/user";
-import { UserContext } from "../contexts/UserContext";
-import { makeComment } from "../api/comment";
+import { deleteEvent, getEventByName } from "../../api/event";
+import Comment from "../../components/Comment";
+import { getUserById } from "../../api/user";
+import { UserContext } from "../../contexts/UserContext";
+import { makeComment } from "../../api/comment";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 
