@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import NavBarButton from "./NavBarButton";
 import { UserContext } from "../contexts/UserContext";
 import { getUserId } from "../api/user";
+import Dropdown from "./Dropdown";
 
 function NavBar() {
   const { user, setUser } = useContext(UserContext);
@@ -39,7 +40,8 @@ function NavBar() {
         )}
         {user?.userName && (
           <div className="flex justify-center items-center h-full font-bold text-xl">
-            <span className="">{user.userName}</span>
+            <span>{user.userName}</span>
+            <Dropdown />
           </div>
         )}
       </div>

@@ -24,6 +24,6 @@ export function getUserById(id) {
   return axios.get(`${API_URL}/${id}`);
 }
 
-// export function logout() {
-//    Implement logout API call...
-// }
+export function logout() {
+  return axios.post(`${API_URL}/logout`);
+}
