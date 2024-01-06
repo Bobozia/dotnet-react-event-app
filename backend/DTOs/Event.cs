@@ -14,7 +14,7 @@ namespace DTOs
         [Required]
         public DateOnly Date { get; set; } = new();
         public TimeOnly Time { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
-        public string Image { get; set; } = string.Empty;
+        public string? Image { get; set; }
     }
 
     public class EventResponse
