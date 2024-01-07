@@ -57,13 +57,13 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetEvents()
+    public async Task<IActionResult> GetEvents([FromQuery] string filter, [FromQuery] int page, [FromQuery] int pageSize)
     {
         try
         {
-            List<Event>? events = await _eventService.GetEvents();
+            (List<Event>? events, int numberOfPages) = await _eventService.GetEvents(filter, page, pageSize);
             if (events != null)
-                return Ok(new EventsResponse { Success = true, Message = "Events found", Events = events });
+                return Ok(new EventsResponse { Success = true, Message = "Events found", Events = events, NumberOfPages = numberOfPages });
             return BadRequest(new EventsResponse { Success = false, Message = "Events not found" });
         }
         catch (Exception ex)

@@ -62,10 +62,19 @@ namespace Services
             return null!;
         }
 
-        public async Task<List<Event>> GetEvents()
+        public async Task<(List<Event>, int)> GetEvents(string filter, int page, int pageSize)
         {
-            List<Event> events = await _context.Events.ToListAsync();
-            return events;
+            List<Event> events = filter switch
+            {
+                "upcoming" => await _context.Events.Where(e => e.Date >= DateOnly.FromDateTime(DateTime.Now)).OrderBy(e => e.Date).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(),
+                "past" => await _context.Events.Where(e => e.Date < DateOnly.FromDateTime(DateTime.Now)).OrderByDescending(e => e.Date).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(),
+                _ => await _context.Events.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(),
+            };
+            double num = await _context.Events.CountAsync() / (double)pageSize;
+            Console.WriteLine("LALsA:" + num);
+            int numberOfPages = (int)Math.Ceiling(num);
+            Console.WriteLine("LALA:" + numberOfPages);
+            return (events, numberOfPages);
         }
 
         public async Task<bool> DeleteEvent(Event eventToDelete)

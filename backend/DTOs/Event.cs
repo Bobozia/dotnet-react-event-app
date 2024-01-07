@@ -29,6 +29,7 @@ namespace DTOs
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
         public List<Event> Events { get; set; } = new();
+        public int? NumberOfPages { get; set; }
     }
 
     public class UpdateEventRequest
@@ -39,5 +40,10 @@ namespace DTOs
         public DateOnly? Date { get; set; }
         public TimeOnly? Time { get; set; }
         public string? Image { get; set; }
+    }
+    public class GetEventsRequest
+    {
+        public int Page { get; set; } = 1;
+        public int PageSize { get; set; } = 6;
     }
 }

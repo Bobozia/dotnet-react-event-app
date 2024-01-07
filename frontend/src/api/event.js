@@ -3,8 +3,10 @@ import axios from "axios";
 const API_URL = "http://localhost:5067/api/events";
 axios.defaults.withCredentials = true;
 
-export function getAllEvents() {
-  return axios.get(`${API_URL}`);
+export function getEventsByFilter(filter, page, pageSize) {
+  return axios.get(
+    `${API_URL}?filter=${filter}&page=${page}&pageSize=${pageSize}`
+  );
 }
 
 export function getEventByName(name) {

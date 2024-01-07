@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { getAllEvents } from "../../api/event";
+import { getEventsByFilter } from "../../api/event";
 import EventsGrid from "../../components/EventsGrid";
 import { UserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -8,17 +8,21 @@ function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
+  const [filter, setFilter] = useState("all");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
+  const [numberOfPages, setNumberOfPages] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (events.length === 0) {
-      getEvents();
-    }
-  });
+    getEvents(filter);
+  }, [filter, page]);
 
-  const getEvents = async () => {
-    const response = await getAllEvents();
+  const getEvents = async (filter) => {
+    const response = await getEventsByFilter(filter, page, pageSize);
     setEvents(response.data.events);
+    setNumberOfPages(response.data.numberOfPages);
+    console.log(response);
     setLoading(false);
   };
 
@@ -31,6 +35,17 @@ function Events() {
     <div className="h-full w-full pt-16 overflow-y-auto">
       {user?.userName && (
         <div className="flex justify-end">
+          <select
+            onChange={(e) => setFilter(e.target.value)}
+            className="mb-2 px-4 py-1 border-slate-400 border-2 font-semibold bg-slate-700 hover:bg-slate-800 text-slate-200 w-[10%] mr-5"
+          >
+            <option value="all">All</option>
+            {/* {user?.id && <option value="my">My events</option>} */}
+            {/* <option value="joined">Joined events</option> */}
+            <option value="upcoming">Upcoming</option>
+            <option value="past">Past</option>
+          </select>
+
           <button
             className="mb-2 px-4 py-1 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200 w-[10%] mr-5"
             onClick={redirectToCreateEventPage}
@@ -42,6 +57,21 @@ function Events() {
       {loading && <p>Loading...</p>}
       {!loading && events.length == 0 && <p>There are no events :P</p>}
       <EventsGrid events={events} setEvents={setEvents} />
+      {!loading && (
+        <div className="flex justify-center">
+          {Array.from(Array(numberOfPages).keys()).map((pageNumber) => (
+            <button
+              key={pageNumber}
+              className="py-1 px-3 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200 mr-2"
+              onClick={() => {
+                setPage(pageNumber + 1);
+              }}
+            >
+              {pageNumber + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
