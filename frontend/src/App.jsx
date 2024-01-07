@@ -7,6 +7,7 @@ import Events from "./pages/event/Events";
 import Event from "./pages/event/Event";
 import CreateEvent from "./pages/event/createEvent";
 import UpdateEvent from "./pages/event/updateEvent";
+import Settings from "./pages/user/settings/Settings";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="events/:name" element={<Event />} />
           <Route path="create-event" element={<CreateEvent />} />
           <Route path="events/:name/update" element={<UpdateEvent />} />
+          <Route path="settings" element={<Settings />} />
           <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </Router>

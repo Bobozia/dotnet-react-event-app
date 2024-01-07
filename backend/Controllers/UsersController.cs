@@ -110,4 +110,26 @@ public class UsersController : ControllerBase
             return Ok(new UserDataResponse { Success = true, Message = "User data", User = user });
         return BadRequest(new { Success = false, Message = "User not found" });
     }
+
+    [HttpPut("username")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> UpdateUsername([FromBody] ChangeUserNameRequest request)
+    {
+        string? username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        (bool success, string errors) = await _authenticationService.UpdateUsername(username!, request.NewUserName);
+        if (success)
+            return Ok(new { Success = true, Message = "Username updated successfully" });
+        return BadRequest(new { Success = false, Message = errors });
+    }
+
+    [HttpPut("password")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> UpdatePassword([FromBody] ChangePasswordRequest request)
+    {
+        string? username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        (bool success, string errors) = await _authenticationService.UpdatePassword(username!, request.OldPassword, request.NewPassword);
+        if (success)
+            return Ok(new { Success = true, Message = "Password updated successfully" });
+        return BadRequest(new { Success = false, Message = errors });
+    }
 }

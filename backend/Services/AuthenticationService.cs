@@ -67,5 +67,31 @@ namespace Services
 
             return (false, "");
         }
+
+        public async Task<(bool, string)> UpdatePassword(string userName, string oldPassword, string newPassword)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            var result = await _userManager.ChangePasswordAsync(user!, oldPassword, newPassword);
+            var errors = result.Errors.ToList();
+
+            if (result.Succeeded)
+                return (true, ""); ;
+
+            return (false, errors[0].Description.ToString());
+        }
+
+        public async Task<(bool, string)> UpdateUsername(string userName, string newUserName)
+        {
+            newUserName = newUserName.Trim();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            var result = await _userManager.SetUserNameAsync(user!, newUserName);
+            var errors = result.Errors.ToList();
+
+            if (result.Succeeded)
+                return (true, "");
+
+            return (false, errors[0].Description.ToString());
+        }
     }
 }

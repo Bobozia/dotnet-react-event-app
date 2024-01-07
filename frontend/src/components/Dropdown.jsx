@@ -39,7 +39,7 @@ function Dropdown() {
         >
           {options.map((option) => (
             <div
-              className="flex justify-center items-center h-full text-xl w-full hover:bg-slate-700 border-b-2"
+              className="flex justify-center items-center h-full text-xl w-full hover:bg-slate-700 border-b-2 px-3 py-1"
               key={option}
             >
               {renderButton(option)}

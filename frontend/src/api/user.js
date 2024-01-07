@@ -27,3 +27,11 @@ export function getUserById(id) {
 export function logout() {
   return axios.post(`${API_URL}/logout`);
 }
+
+export function updateUsername(newUserName) {
+  return axios.put(`${API_URL}/username`, { newUserName });
+}
+
+export function updatePassword(oldPassword, newPassword) {
+  return axios.put(`${API_URL}/password`, { oldPassword, newPassword });
+}
