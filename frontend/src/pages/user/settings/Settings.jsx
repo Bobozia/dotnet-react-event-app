@@ -36,7 +36,6 @@ function Settings() {
         window.location.href = "/login";
       }
     } catch (err) {
-      console.log(err);
       setPasswordError(err.response.data.message);
     }
   };
@@ -61,6 +60,7 @@ function Settings() {
             className="text-black outline-none w-64"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder=" New username"
             required
           />
 
