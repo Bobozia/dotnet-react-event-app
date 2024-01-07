@@ -10,7 +10,7 @@ function Events() {
   const { user } = useContext(UserContext);
   const [filter, setFilter] = useState("all");
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(4);
   const [numberOfPages, setNumberOfPages] = useState(1);
   const navigate = useNavigate();
 
@@ -40,8 +40,6 @@ function Events() {
             className="mb-2 px-4 py-1 border-slate-400 border-2 font-semibold bg-slate-700 hover:bg-slate-800 text-slate-200 w-[10%] mr-5"
           >
             <option value="all">All</option>
-            {/* {user?.id && <option value="my">My events</option>} */}
-            {/* <option value="joined">Joined events</option> */}
             <option value="upcoming">Upcoming</option>
             <option value="past">Past</option>
           </select>
@@ -62,7 +60,9 @@ function Events() {
           {Array.from(Array(numberOfPages).keys()).map((pageNumber) => (
             <button
               key={pageNumber}
-              className="py-1 px-3 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200 mr-2"
+              className={`py-1 px-3 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200 mr-2 ${
+                pageNumber + 1 === page ? "bg-slate-800" : ""
+              }`}
               onClick={() => {
                 setPage(pageNumber + 1);
               }}
