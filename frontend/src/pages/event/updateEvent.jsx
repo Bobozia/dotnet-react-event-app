@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getEventByName, updateEvent } from "../../api/event";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaHome } from "react-icons/fa";
 
 function UpdateEvent() {
   const { name } = useParams();
@@ -76,6 +77,13 @@ function UpdateEvent() {
             className="inline-block text-slate-200 ml-1 hover:text-slate-400 cursor-pointer text-3xl"
           >
             <IoMdArrowRoundBack />
+          </Link>
+          <Link
+            to={`/`}
+            title="Back to home page"
+            className="inline-block text-slate-200 ml-1 hover:text-slate-400 cursor-pointer text-3xl"
+          >
+            <FaHome />
           </Link>
           <form className="h-full" onSubmit={handleSubmit}>
             <fieldset className="h-full flex flex-col justify-center items-center">
