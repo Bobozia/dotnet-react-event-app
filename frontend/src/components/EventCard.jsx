@@ -19,7 +19,7 @@ function EventCard({ event, isOwner, events, setEvents }) {
   return (
     <div className="flex flex-row mx-3 border-slate-600 border-2 rounded-md mt-2 hover:border-slate-400">
       <div
-        className=" w-[35%] aspect-square bg-cover bg-center hover:cursor-pointer hover:opacity-90"
+        className="w-80 h-80 aspect-square bg-cover bg-center hover:cursor-pointer hover:opacity-90"
         style={{ backgroundImage: `url(data:image/png;base64,${event.image}` }}
         onClick={() => {
           navigate(`/events/${event.name}`);
@@ -56,7 +56,7 @@ function EventCard({ event, isOwner, events, setEvents }) {
           {event.name}
         </Link>
         <p className="text-base">Date: {event.date}</p>
-        <p className="text-xl text-gray-300">
+        <p className="text-xl text-gray-300 w-3/4">
           <small>{event.description}</small>
         </p>
       </div>
