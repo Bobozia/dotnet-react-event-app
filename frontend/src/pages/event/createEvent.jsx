@@ -3,20 +3,39 @@ import { createEvent } from "../../api/event";
 import { useNavigate } from "react-router-dom";
 
 function CreateEvent() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [image, setImage] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    location: "",
+    date: "",
+    time: "",
+    image: "",
+  });
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setForm((prev) => ({ ...prev, image: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const tryCreateEvent = async (e) => {
     e.preventDefault();
+    const { name, description, location, date, time, image } = form;
     if (!name || !location || !date) {
       alert("Name, location and date are required");
       return;
     }
+
     const event = { name, location, date };
 
     if (description) event.description = description;
@@ -27,20 +46,14 @@ function CreateEvent() {
     if (res.status === 200) navigate("/events");
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    tryCreateEvent(e);
   };
 
   return (
     <div className="pt-14 h-full">
-      <form className="h-full" onSubmit={tryCreateEvent}>
+      <form className="h-full" onSubmit={handleSubmit}>
         <fieldset className="h-full flex flex-col justify-center items-center">
           <div>
             <legend className="text-slate-300 text-xl font-bold">
@@ -52,8 +65,8 @@ function CreateEvent() {
             <input
               type="text"
               className="text-slate-900 outline-none w-full"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              name="name"
+              onChange={handleChange}
               required
             />
           </label>
@@ -61,8 +74,8 @@ function CreateEvent() {
             Description
             <textarea
               className="text-slate-900 outline-none w-full"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              name="description"
+              onChange={handleChange}
             />
           </label>
           <label className="text-slate-200 block xl:w-[20%] w-[30%]">
@@ -70,8 +83,8 @@ function CreateEvent() {
             <input
               type="text"
               className="text-slate-900 outline-none w-full"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              name="location"
+              onChange={handleChange}
               required
             />
           </label>
@@ -80,8 +93,8 @@ function CreateEvent() {
             <input
               type="date"
               className="text-slate-900 outline-none w-full"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              name="date"
+              onChange={handleChange}
               required
             />
           </label>
@@ -90,8 +103,8 @@ function CreateEvent() {
             <input
               type="time"
               className="text-slate-900 outline-none w-full"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
+              name="time"
+              onChange={handleChange}
             />
           </label>
           <label className="text-slate-200 block xl:w-[20%] w-[30%]">

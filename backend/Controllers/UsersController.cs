@@ -33,7 +33,22 @@ public class UsersController : ControllerBase
                 bool addedRole = await _authenticationService.AddRole(registerRequest.UserName, "User");
                 if (!addedRole)
                     return BadRequest(new RegisterResponse { Success = false, Message = "Failed to add role" });
-                return Ok(new RegisterResponse { Success = true, Message = "User created successfully" });
+                (bool loginSuccess, string token) = await _authenticationService.Login(new LoginRequest { UserName = registerRequest.UserName, Password = registerRequest.Password });
+
+                if (loginSuccess)
+                {
+                    Response.Cookies.Append("X-Access-Token", token, new CookieOptions
+                    {
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict,
+                        Expires = DateTimeOffset.UtcNow.AddDays(7)
+                    });
+                    return Ok(new RegisterResponse { Success = true, Message = "User created successfully" });
+                }
+                else
+                {
+                    return BadRequest(new RegisterResponse { Success = false, Message = "Failed to login" });
+                }
             }
             return BadRequest(new RegisterResponse { Success = false, Message = errors });
         }
@@ -59,7 +74,7 @@ public class UsersController : ControllerBase
                     Expires = DateTimeOffset.UtcNow.AddDays(7)
                 });
                 string id = await _userService.GetUserId(loginRequest.UserName);
-                return Ok(new LoginResponse { Success = true, Message = "User logged in successfully", Id = id });
+                return Ok(new LoginResponse { Success = true, Message = "User logged in successfully", Id = id, UserName = loginRequest.UserName });
             }
             return BadRequest(new LoginResponse { Success = false, Message = "Bad credentials" });
         }

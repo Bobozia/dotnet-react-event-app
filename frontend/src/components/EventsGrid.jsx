@@ -1,12 +1,11 @@
-import { useContext } from "react";
-import { UserContext } from "../contexts/UserContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 import EventCard from "./EventCard";
 
 function EventsGrid({ events, setEvents }) {
   //add select to choose : upcoming, past, all
   //add search bar
   //add pagination
-  const { user } = useContext(UserContext);
+  const { user } = useAuthContext();
 
   return (
     <div className="grid grid-cols-2 mx-auto pb-4">
@@ -16,7 +15,7 @@ function EventsGrid({ events, setEvents }) {
           event={event}
           events={events}
           setEvents={setEvents}
-          isOwner={event.userId == user.id ? true : false}
+          isOwner={event.userId == user?.id ? true : false}
         />
       ))}
     </div>

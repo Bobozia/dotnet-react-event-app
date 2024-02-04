@@ -1,52 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import { login, register } from "../../api/user";
-import { UserContext } from "../../contexts/UserContext";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useRegister } from "../../hooks/useRegister";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(null);
-  const { user, setUser } = useContext(UserContext);
+  const { register, error, isLoading } = useRegister();
   const navigate = useNavigate();
+  const { user } = useAuthContext();
+  //make one variable as Form and use it as an object
+  if (user?.id) {
+    navigate("/");
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (passwordMatch()) {
-      try {
-        const result = await register(
-          email,
-          userName,
-          password,
-          confirmPassword
-        );
-        if (result.data.message === "User created successfully") {
-          try {
-            const res = await login(userName, password);
-            setUser({ userName: userName, id: res.data.id });
-            localStorage.setItem("userName", JSON.stringify(userName));
-            navigate("/");
-          } catch (error) {
-            setError(error.response.data.message);
-          }
-        }
-      } catch (error) {
-        setError(error.response.data.message);
-      }
-    } else setError("Password does not match");
-  };
 
-  const passwordMatch = () => {
-    return password === confirmPassword;
+    await register(email, userName, password, confirmPassword);
   };
-
-  useEffect(() => {
-    if (user.id !== null) {
-      navigate("/");
-    }
-  }, [user]);
 
   return (
     <div className="h-full w-full pt-16 flex flex-col items-center justify-center">
@@ -88,6 +62,7 @@ function Register() {
         />
         {error && <p className="text-red-500">{error}</p>}
         <button
+          disabled={isLoading}
           type="submit"
           className="mb-2 px-4 py-1 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200"
         >

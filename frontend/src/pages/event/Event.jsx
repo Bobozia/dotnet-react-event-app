@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { deleteEvent, getEventByName } from "../../api/event";
 import Comment from "../../components/Comment";
 import { getUserById } from "../../api/user";
-import { UserContext } from "../../contexts/UserContext";
+import { useAuthContext } from "../../hooks/useAuthContext";
 import { makeComment } from "../../api/comment";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
@@ -13,7 +13,7 @@ function Event() {
   const [event, setEvent] = useState(null);
   const [comments, setComments] = useState([]);
   const [commenters, setCommenters] = useState([]);
-  const { user } = useContext(UserContext);
+  const { user } = useAuthContext();
   const [comment, setComment] = useState("");
   const [time, setTime] = useState("");
   const navigate = useNavigate();
@@ -90,7 +90,7 @@ function Event() {
 
   return (
     <div className="h-full w-full pt-16 overflow-y-auto">
-      {event?.userId == user.id && (
+      {event?.userId == user?.id && (
         <div className="flex justify-end pr-2">
           <Link
             to={`/events/${event?.name}/update`}

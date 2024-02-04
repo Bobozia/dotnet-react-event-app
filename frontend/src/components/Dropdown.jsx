@@ -1,12 +1,13 @@
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../api/user";
+import { useLogout } from "../hooks/useLogout";
 
 function Dropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const options = ["Settings", "Logout"];
   const navigate = useNavigate();
+  const { logout } = useLogout();
 
   const renderButton = (option) => {
     switch (option) {
@@ -18,11 +19,7 @@ function Dropdown() {
   };
 
   const handleLogout = async () => {
-    const res = await logout();
-    if (res.data.success) {
-      localStorage.removeItem("userName");
-      window.location.reload();
-    }
+    await logout();
   };
 
   return (

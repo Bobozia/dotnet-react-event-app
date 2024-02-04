@@ -1,37 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
-import { login } from "../../api/user";
-import { Link } from "react-router-dom";
-import { UserContext } from "../../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogin } from "../../hooks/useLogin";
+import { useAuthContext } from "../../hooks/useAuthContext";
 
 function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const { user, setUser } = useContext(UserContext);
+  const { login, error, isLoading } = useLogin();
+  const { user } = useAuthContext();
   const navigate = useNavigate();
+
+  if (user?.id) {
+    navigate("/");
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!userName || !password) {
-      setError("Please enter username and password");
-      return;
-    }
-    try {
-      const result = await login(userName, password);
-      setUser({ userName: userName, id: result.data.id });
-      localStorage.setItem("userName", userName);
-      navigate("/");
-    } catch (error) {
-      setError(error.response.data.message);
-    }
+    await login(userName, password);
   };
-
-  useEffect(() => {
-    if (user.id !== null) {
-      navigate("/");
-    }
-  }, [user]);
 
   return (
     <div className="h-full w-full pt-16 flex flex-col items-center justify-center">
@@ -45,6 +31,7 @@ function Login() {
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           className="mb-2 rounded-md focus:outline-none hover:bg-slate-100 w-[100%]"
+          required
         />
         <input
           type="password"
@@ -52,10 +39,12 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="mb-2 rounded-md focus:outline-none hover:bg-slate-100 w-[100%]"
+          required
         />
         {error && <p className="text-red-500">{error}</p>}
         <input
           type="submit"
+          disabled={isLoading}
           className="mb-2 px-4 py-1 border-slate-400 border-2 font-semibold hover:bg-slate-800 text-slate-200"
           value="Log In"
         />
