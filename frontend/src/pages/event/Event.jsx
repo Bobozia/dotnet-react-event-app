@@ -149,7 +149,7 @@ function Event() {
           </div>
           <div className="w-[40%]">
             <h1 className="text-4xl font-bold text-slate-200">{event.name}</h1>
-            <p className="text-xl text-gray-300">{event.description}</p>
+            <p className="text-xl text-gray-300 pr-5">{event.description}</p>
             <p className="text-xl text-gray-300">
               Date: {new Date(event.date).toLocaleDateString()}
             </p>

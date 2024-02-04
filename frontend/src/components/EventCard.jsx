@@ -48,15 +48,15 @@ function EventCard({ event, isOwner, events, setEvents }) {
         )}
       </div>
 
-      <div className="pl-2">
+      <div className="pl-2 text-slate-200">
         <Link
           to={`/events/${event.name}`}
-          className="font-bold text-xl hover:cursor-pointer text-slate-200 hover:text-slate-300"
+          className="font-bold text-xl hover:cursor-pointer hover:text-slate-300"
         >
           {event.name}
         </Link>
         <p className="text-base">Date: {event.date}</p>
-        <p className="text-xl text-gray-500">
+        <p className="text-xl text-gray-300">
           <small>{event.description}</small>
         </p>
       </div>
