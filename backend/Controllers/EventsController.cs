@@ -113,4 +113,52 @@ public class EventsController : ControllerBase
             return BadRequest(new EventResponse { Success = false, Message = ex.Message });
         }
     }
+
+    [HttpGet("count")]
+    public async Task<IActionResult> GetEventsCount()
+    {
+        try
+        {
+            int count = await _eventService.GetEventsCount();
+            return Ok(new { Success = true, Message = "Events count found", Count = count });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Success = false, Message = ex.Message });
+        }
+    }
+
+    [HttpGet("user")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    public async Task<IActionResult> GetEventsByUser([FromQuery] int page, [FromQuery] int pageSize)
+    {
+        try
+        {
+            User? user = await _userService.GetUser(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
+            (List<Event>? events, int numberOfPages) = await _eventService.GetEventsByUser(user!, page, pageSize);
+            if (events != null)
+                return Ok(new EventsResponse { Success = true, Message = "Events found", Events = events, NumberOfPages = numberOfPages });
+            return BadRequest(new EventsResponse { Success = false, Message = "Events not found" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new EventsResponse { Success = false, Message = ex.Message });
+        }
+    }
+
+    [HttpGet("random")]
+    public async Task<IActionResult> GetRandomEvent(string? userId = null)
+    {
+        try
+        {
+            Event? randomEvent = await _eventService.GetRandomEvent(userId);
+            if (randomEvent != null)
+                return Ok(new EventResponse { Success = true, Message = "Random event found", Event = randomEvent });
+            return BadRequest(new EventResponse { Success = false, Message = "Random event not found" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new EventResponse { Success = false, Message = ex.Message });
+        }
+    }
 }

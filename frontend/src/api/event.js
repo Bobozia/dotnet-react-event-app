@@ -24,3 +24,15 @@ export function updateEvent(id, event) {
 export function deleteEvent(id) {
   return axios.delete(`${API_URL}/${id}`);
 }
+
+export function getEventsCount() {
+  return axios.get(`${API_URL}/count`);
+}
+
+export function getEventsByUser(page, pageSize) {
+  return axios.get(`${API_URL}/user?page=${page}&pageSize=${pageSize}`);
+}
+
+export function getRandomEvent(userId) {
+  return axios.get(`${API_URL}/random?userId=${userId}`);
+}

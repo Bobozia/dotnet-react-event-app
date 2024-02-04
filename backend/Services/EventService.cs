@@ -71,9 +71,8 @@ namespace Services
                 _ => await _context.Events.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(),
             };
             double num = await _context.Events.CountAsync() / (double)pageSize;
-            Console.WriteLine("LALsA:" + num);
             int numberOfPages = (int)Math.Ceiling(num);
-            Console.WriteLine("LALA:" + numberOfPages);
+
             return (events, numberOfPages);
         }
 
@@ -104,6 +103,41 @@ namespace Services
                 return eventToUpdate;
             }
             throw new Exception("No changes were made");
+        }
+
+        public async Task<int> GetEventsCount()
+        {
+            return await _context.Events.CountAsync();
+        }
+
+        public async Task<(List<Event>, int)> GetEventsByUser(User user, int page, int pageSize)
+        {
+            if (user != null)
+            {
+                List<Event> events = await _context.Events.Where(e => e.UserId == user.Id).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+                double num = await _context.Events.Where(e => e.UserId == user.Id).CountAsync() / (double)pageSize;
+                int numberOfPages = (int)Math.Ceiling(num);
+                return (events, numberOfPages);
+            }
+            return (null!, 0);
+        }
+
+        public async Task<Event> GetRandomEvent(string? userId = null)
+        {
+            var upcomingEvents = await _context.Events
+                .Where(e => e.UserId != userId)
+                .Where(e => e.Date > DateOnly.FromDateTime(DateTime.Now))
+                .ToListAsync();
+
+            if (!upcomingEvents.Any())
+            {
+                return null!;
+            }
+
+            var random = new Random();
+            var randomEvent = upcomingEvents[random.Next(upcomingEvents.Count)];
+
+            return randomEvent;
         }
     }
 }
